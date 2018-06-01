@@ -6,6 +6,9 @@
     "chai": "^4.1.2"
   },
   "dependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "performance": "^1.1.1",
+    "performance-now": "^2.1.0",
+    "present": "^1.0.0"
   }
 }

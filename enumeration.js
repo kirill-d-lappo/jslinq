@@ -83,7 +83,7 @@ function enumerateLastWhere(array, condition){
     return null;
   }
 
-  for (let i = array.length; i >= 0; i++) {
+  for (let i = array.length - 1; i >= 0; i--) {
     const element = array[i];
     if (condition(element)){
       return element;
@@ -93,14 +93,16 @@ function enumerateLastWhere(array, condition){
   return null;
 }
 
-
-function enumerateOrderBy(array, fieldName){
-  array.sort((a, b) =>
-    a[fieldName] > b[fieldName]
+function enumerateOrderBy(array, fieldFunc){
+  array.sort((a, b) => {
+    let fieldA = fieldFunc(a);
+    let fieldB = fieldFunc(b);
+    return fieldA > fieldB
       ? 1
-      : a[fieldName] < b[fieldName]
+      : fieldA < fieldB
         ? -1
         : 0
+    }
   );
 
   return array;
@@ -120,18 +122,39 @@ function enumerateSum(array){
   return sum;
 }
 
-function createEnumeration(array){
+function enumerateAggregation(array, initial, stepFunc){
+    if (array.length <= 0){
+        return initial;
+    }
+
+    var result = initial;
+    array.forEach(element => {
+        result = stepFunc(result, element);
+    });
+
+    return result;
+}
+
+  /**
+ * Condition callback
+ *
+ * @param {array} array Array to _enumerate.
+ * @return {enumeration} Enumeration with methods for enumeration
+ */
+function _enumerate(array){
   return {
-    where  : (condition) => createEnumeration(enumerateWhere(array, condition)),
-    select : (predicate) => createEnumeration(enumerateSelect(array, predicate)),
-    skip : (count) => createEnumeration(enumerateSkip(array, count)),
-    take : (count) => createEnumeration(enumerateTake(array, count)),
-    first : () => createEnumeration(enumerateFirst(array)),
+
+    aggreate : (initial, stepFunc) => enumerateAggregation(array, initial, stepFunc),
+    where  : (condition) => _enumerate(enumerateWhere(array, condition)),
+    select : (predicate) => _enumerate(enumerateSelect(array, predicate)),
+    skip : (count) => _enumerate(enumerateSkip(array, count)),
+    take : (count) => _enumerate(enumerateTake(array, count)),
+    first : () => enumerateFirst(array),
     firstWhere : (predicate) => enumerateFirstWhere(array, predicate),
-    last : () => createEnumeration(enumerateLast(array)),
+    last : () => enumerateLast(array),
     lastWhere : (predicate) => enumerateLastWhere(array, predicate),
-    orderBy : (fieldName) => createEnumeration(enumerateOrderBy(array, fieldName)),
-    sort : () => createEnumeration(enumerateSort(array)),
+    orderBy : (fieldFunc) => _enumerate(enumerateOrderBy(array, fieldFunc)),
+    sort : () => _enumerate(enumerateSort(array)),
     count : () => enumerateCount(array),
     sum : () => enumerateSum(array),
     toArray: () => array
@@ -139,5 +162,6 @@ function createEnumeration(array){
 }
 
 module.exports = {
-  from : (array) => createEnumeration(array)
-};
+  enumerate : (array) => _enumerate(array)
+}
+
