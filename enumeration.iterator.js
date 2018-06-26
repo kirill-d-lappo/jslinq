@@ -1,9 +1,5 @@
 "use strict";
 
-function log(value){
-  console.log(value);
-}
-
 
 function iterator(array){
   var index = -1;
@@ -86,7 +82,11 @@ function toArray(iterator){
 }
 
 function sum(iterator){
-  var result;
+  if (!iterator.moveNext()){
+    return null;
+  }
+
+  var result = iterator.current();
   while(iterator.moveNext()){
     result += iterator.current();
   }
