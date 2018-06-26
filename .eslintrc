@@ -1,7 +1,8 @@
 {
     "env": {
         "commonjs": true,
-        "es6": true
+        "es6": true,
+        "browser": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -13,10 +14,6 @@
         "indent": [
             "warn",
             2
-        ],
-        "linebreak-style": [
-            "error",
-            "windows"
         ],
         "quotes": [
             "warn",

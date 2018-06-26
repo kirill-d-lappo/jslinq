@@ -163,5 +163,5 @@ function _enumerate(array){
 
 module.exports = {
   enumerate : (array) => _enumerate(array)
-}
+};
 
