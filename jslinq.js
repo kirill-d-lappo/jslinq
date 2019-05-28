@@ -1,6 +1,6 @@
 
-function _getArrayIterator(array){
-  return array[Symbol.iterator]();
+function _getIterator(instance){
+  return instance[Symbol.iterator]();
 }
 
 function* whereIterator(iterator, condition) {
@@ -181,7 +181,7 @@ function _iterate(iterator) {
 
     all: (condition) => allWhere(iterator, condition),
     any: (condition) => anyWhere(iterator, condition),
-    concat: (secondArray) => _iterate(concatIterator(iterator, _getArrayIterator(secondArray))),
+    concat: (secondArray) => _iterate(concatIterator(iterator, _getIterator(secondArray))),
     distinct: () => _iterate(distinctIterator(iterator)),
 
     // Conclusion functions, which doesn't return iterator
@@ -199,5 +199,5 @@ function _iterate(iterator) {
 // };
 
 Array.prototype.asEnumerable = function() {
-  return _iterate(_getArrayIterator(this));
+  return _iterate(_getIterator(this));
 };
