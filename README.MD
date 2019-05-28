@@ -1,4 +1,4 @@
-# jLinq
+# jslinq
 
 ## Description
 
@@ -9,7 +9,7 @@ Very early and unfinished; do I have much time to complete it?...
 ## Usage
 
 ```javascript
-require("jlinq");
+require("jslinq");
 
 let array = [1, 2, 3, 4, 5, 6];
 let filteredValues = array.asEnumerable() // ["x2", "x4", "x6"]
