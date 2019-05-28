@@ -54,10 +54,6 @@ function enumerateTake(array, count){
   return subset;
 }
 
-function enumerateFirst(array){
-  return enumerateFirstWhere(array, (e) => true);
-}
-
 function enumerateFirstWhere(array, condition){
   if (array.length <= 0){
     return null;
@@ -65,7 +61,7 @@ function enumerateFirstWhere(array, condition){
 
   for (let i = 0; i < array.length; i++) {
     const element = array[i];
-    if (condition(element)){
+    if (!condition || condition(element)){
       return element;
     }
   }
@@ -74,10 +70,6 @@ function enumerateFirstWhere(array, condition){
 }
 
 
-function enumerateLast(array){
-  return enumerateLastWhere(array, (e) => true);
-}
-
 function enumerateLastWhere(array, condition){
   if (array.length <= 0){
     return null;
@@ -85,7 +77,7 @@ function enumerateLastWhere(array, condition){
 
   for (let i = array.length - 1; i >= 0; i--) {
     const element = array[i];
-    if (condition(element)){
+    if (!condition || condition(element)){
       return element;
     }
   }
@@ -149,10 +141,8 @@ function _enumerate(array){
     select : (predicate) => _enumerate(enumerateSelect(array, predicate)),
     skip : (count) => _enumerate(enumerateSkip(array, count)),
     take : (count) => _enumerate(enumerateTake(array, count)),
-    first : () => enumerateFirst(array),
-    firstWhere : (predicate) => enumerateFirstWhere(array, predicate),
-    last : () => enumerateLast(array),
-    lastWhere : (predicate) => enumerateLastWhere(array, predicate),
+    first : (predicate) => enumerateFirstWhere(array, predicate),
+    last : (predicate) => enumerateLastWhere(array, predicate),
     orderBy : (fieldFunc) => _enumerate(enumerateOrderBy(array, fieldFunc)),
     sort : () => _enumerate(enumerateSort(array)),
     count : () => enumerateCount(array),

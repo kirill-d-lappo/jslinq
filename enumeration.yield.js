@@ -167,7 +167,6 @@ function _iterate(iterator) {
     takeWhile: (condition) => _iterate(takeWhileIterator(iterator, condition)),
     aggregate: (resultNextFunc, seed) => aggregate(iterator, resultNextFunc, seed),
     first: (condition) => firstWhere(iterator, condition),
-    firstWhere: (condition) => firstWhere(iterator, condition),
     all: (condition) => allWhere(iterator, condition),
     any: (condition) => anyWhere(iterator, condition),
     concat: (secondArray) => _iterate(concatIterator(iterator, secondArray[Symbol.iterator]())),

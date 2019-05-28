@@ -20,7 +20,7 @@ function measureTime(array){
       var value = func(array)
         .where(u => u.age > 30)
         .select(u => u.surname)
-        .firstWhere(n => n.length > 5);
+        .first(n => n.length > 5);
 
       var endTime = now();
       length = endTime - startTime;
