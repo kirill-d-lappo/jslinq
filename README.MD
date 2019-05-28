@@ -23,7 +23,7 @@ let areInFirstTenth = array.asEnumerable() // true, all are < 10
 
 let a = [1, 2, 3];
 let b = [4, 5, 6];
-let aAndB = a.asEnumerable() // [1, 2, 3, 4, 5, 6]
+let aAndB = a.asEnumerable() // ["1", "2", "3", "4", "5", "6"]
     .concat(b) // concat iterator here
-    .toArray(); // result array is created only here
+    .toArray(i => i.toString()); // result array is created only here
 ```
