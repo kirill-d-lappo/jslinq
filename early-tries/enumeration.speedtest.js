@@ -1,6 +1,6 @@
 "use strict";
 
-require("../jlinq");
+require("../jslinq");
 
 const enumerate = require("./enumeration").enumerate;
 const iterate = require("./enumeration.iterator").iterate;
