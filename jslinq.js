@@ -143,11 +143,15 @@ function aggregate(iterator, updateResult, initValue) {
   return result;
 }
 
-function toArray(iterator) {
+function toArray(iterator, valueFunc) {
   let result = [];
   let next;
+  let currentValue;
+
   while (!(next = iterator.next()).done) {
-    result.push(next.value);
+    currentValue = valueFunc ? valueFunc(next.value) : next.value;
+
+    result.push(currentValue);
   }
 
   return result;
@@ -166,7 +170,7 @@ function toKeyValue(iterator, keyFunc, valueFunc) {
 function _iterate(iterator) {
   return {
     where: condition => _iterate(whereIterator(iterator, condition)),
-    select: predicate => _iterate(selectIterator(iterator, predicate)),
+    select: projection => _iterate(selectIterator(iterator, projection)),
 
     skip: count => _iterate(skipIterator(iterator, count)),
     skipWhile: condition => _iterate(skipWhileIterator(iterator, condition)),
@@ -192,7 +196,7 @@ function _iterate(iterator) {
     elementAt: index => firstWhere(iterator, () => index-- <= 0),
     toKeyValue: (keyFunc, valueFunc) =>
       toKeyValue(iterator, keyFunc, valueFunc),
-    toArray: () => toArray(iterator)
+    toArray: valueFunc => toArray(iterator, valueFunc)
   };
 }
 
