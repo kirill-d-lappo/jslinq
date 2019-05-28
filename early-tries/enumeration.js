@@ -86,14 +86,15 @@ function enumerateLastWhere(array, condition){
 }
 
 function enumerateOrderBy(array, fieldFunc){
-  array.sort((a, b) => {
-    let fieldA = fieldFunc(a);
-    let fieldB = fieldFunc(b);
-    return fieldA > fieldB
-      ? 1
-      : fieldA < fieldB
-        ? -1
-        : 0
+  array.sort(
+    (a, b) => {
+      let fieldA = fieldFunc(a);
+      let fieldB = fieldFunc(b);
+      return fieldA > fieldB
+        ? 1
+        : fieldA < fieldB
+          ? -1
+          : 0
     }
   );
 
@@ -115,19 +116,19 @@ function enumerateSum(array){
 }
 
 function enumerateAggregation(array, initial, stepFunc){
-    if (array.length <= 0){
-        return initial;
-    }
+  if (array.length <= 0){
+    return initial;
+  }
 
-    var result = initial;
-    array.forEach(element => {
-        result = stepFunc(result, element);
-    });
+  var result = initial;
+  array.forEach(element => {
+    result = stepFunc(result, element);
+  });
 
-    return result;
+  return result;
 }
 
-  /**
+/**
  * Condition callback
  *
  * @param {array} array Array to _enumerate.

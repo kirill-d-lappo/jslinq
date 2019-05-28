@@ -1,16 +1,17 @@
-var chai = require('chai');
+require("../jlinq");
+const chai = require("chai");
+
 const expect = chai.expect;
-const iterate = require("./../enumeration.iterator").iterate;
 
 // Arrange
 var tenSource = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 // Defines a Mocha test suite to group tests of similar kind together
-describe("Enumeration.Iterator Positive Tests", function () {
+describe("Positive Flow", function () {
 
   it("where() : array has subset for condition : correct subset is returned", function () {
     // Act
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .where(i => i == 5)
       .toArray();
 
@@ -21,7 +22,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("count() : array not empty : correct value is returned", function () {
     // Act
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .count();
 
     // Assert
@@ -30,7 +31,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("count(condition) : array has subset for condition : correct value is returned", function () {
     // Act
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .count(i => i % 2);
 
     // Assert
@@ -39,7 +40,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("any() : array is not empty : true is returned", function () {
     // Act
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .any();
 
     // Assert
@@ -48,7 +49,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("any() : array is empty : false is returned", function () {
     // Act
-    var result = iterate([])
+    var result = [].asEnumerable()
       .any();
 
     // Assert
@@ -57,7 +58,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("all(condition) : all items are correct : true is returned", function () {
     // Act
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .all(i => i > 0);
 
     // Assert
@@ -67,7 +68,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
   it("concat(secondArray) : items are concatenated", function () {
     // Act
     var secondArray = [42, 3.14, 88];
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .concat(secondArray)
       .toArray();
 
@@ -77,7 +78,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("contains(item) : array contains item : true is returned", function () {
     // Act
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .contains(5);
 
     // Assert
@@ -86,7 +87,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("elementAt(index) : array contains item : correct value is returned", function () {
     // Act
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .elementAt(5);
 
     // Assert
@@ -95,7 +96,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("toKeyValue(index) : array is converted correctly", function () {
     // Act
-    var result = iterate(tenSource)
+    var result = tenSource.asEnumerable()
       .toKeyValue(i => "i" + i, i => i*3/2);
 
     // Assert
@@ -107,7 +108,7 @@ describe("Enumeration.Iterator Positive Tests", function () {
 
   it("distinct() : unique elements remained only", function () {
     // Act
-    var result = iterate([2,3,2,3,2,4])
+    var result = [2,3,2,3,2,4].asEnumerable()
       .distinct()
       .toArray();
 

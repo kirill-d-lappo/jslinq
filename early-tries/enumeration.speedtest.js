@@ -1,8 +1,9 @@
 "use strict";
 
+require("../jlinq");
+
 const enumerate = require("./enumeration").enumerate;
 const iterate = require("./enumeration.iterator").iterate;
-const yieldIt = require("./enumeration.yield").iterate;
 const now = require("performance-now");
 const fs = require("fs");
 

@@ -1,4 +1,8 @@
 
+function _getArrayIterator(array){
+  return array[Symbol.iterator]();
+}
+
 function* whereIterator(iterator, condition) {
   let next;
   while(!(next = iterator.next()).done){
@@ -47,6 +51,10 @@ function* takeWhileIterator(iterator, predicate) {
   while(!(next = iterator.next()).done && predicate(next.value)){
     yield next.value;
   }
+}
+
+function takeUnitIterator(iterator, unitIndex, unitSize) {
+  return takeIterator(skipIterator(iterator, unitIndex*unitSize), unitSize);
 }
 
 function* concatIterator(iterator, secondIterator) {
@@ -106,7 +114,7 @@ function allWhere(iterator, predicate) {
 function anyWhere(iterator, predicate) {
   let next;
   while(!(next = iterator.next()).done){
-    if (predicate(next.value)){
+    if (!predicate || predicate(next.value)){
       return true;
     }
   }
@@ -126,11 +134,11 @@ function countWhere(iterator, predicate) {
   return count;
 }
 
-function aggregate(iterator, resultNextFunc, seed){
-  let result = seed;
+function aggregate(iterator, updateResult, initValue){
+  let result = initValue;
   let next;
   while(!(next = iterator.next()).done){
-    result = resultNextFunc(result, next.value);
+    result = updateResult(result, next.value);
   }
 
   return result;
@@ -161,26 +169,35 @@ function _iterate(iterator) {
   return {
     where: (condition) => _iterate(whereIterator(iterator, condition)),
     select: (predicate) => _iterate(selectIterator(iterator, predicate)),
+
     skip: (count) => _iterate(skipIterator(iterator, count)),
     skipWhile: (condition) => _iterate(skipWhileIterator(iterator, condition)),
     take: (count) => _iterate(takeIterator(iterator, count)),
     takeWhile: (condition) => _iterate(takeWhileIterator(iterator, condition)),
-    aggregate: (resultNextFunc, seed) => aggregate(iterator, resultNextFunc, seed),
+    takeUnit: (unitIndex, unitSize) => _iterate(takeUnitIterator(iterator, unitIndex, unitSize)),
+
     first: (condition) => firstWhere(iterator, condition),
+    last: (condition) => lastWhere(iterator, condition),
+
     all: (condition) => allWhere(iterator, condition),
     any: (condition) => anyWhere(iterator, condition),
-    concat: (secondArray) => _iterate(concatIterator(iterator, secondArray[Symbol.iterator]())),
-    contains: (item) => anyWhere(iterator, i => i === item),
-    count: (condition) => countWhere(iterator, condition),
+    concat: (secondArray) => _iterate(concatIterator(iterator, _getArrayIterator(secondArray))),
     distinct: () => _iterate(distinctIterator(iterator)),
+
+    // Conclusion functions, which doesn't return iterator
+    aggregate: (resultNextFunc, seed) => aggregate(iterator, resultNextFunc, seed),
+    count: (condition) => countWhere(iterator, condition),
+    contains: (item) => anyWhere(iterator, i => i === item),
     elementAt: (index) => firstWhere(iterator, () => index-- <= 0),
-    last: (condition) => lastWhere(iterator, condition),
-    // reverse: () => _iterate(reverseIterator(iterator)),
     toKeyValue: (keyFunc, valueFunc) => toKeyValue(iterator, keyFunc, valueFunc),
     toArray: () => toArray(iterator)
   };
 }
 
-module.exports = {
-  iterate: (array) => _iterate(array[Symbol.iterator]())
+// module.exports = {
+//   iterate: (array) => _iterate(array[Symbol.iterator]())
+// };
+
+Array.prototype.asEnumerable = function() {
+  return _iterate(_getArrayIterator(this));
 };
