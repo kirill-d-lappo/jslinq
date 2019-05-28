@@ -231,6 +231,7 @@ function _iterate(iterator) {
     takeWhile: (condition) => { },
     sum: () => sum(iterator), // type problems, not working
     first: (condition) => firstWhere(iterator, condition),
+    firstWhere: (condition) => firstWhere(iterator, condition),
     all: (condition) => allWhere(iterator, condition),
     any: (condition) => anyWhere(iterator, condition),
     concat: (secondArray) => _iterate(concatIterator(iterator, new Iterator(secondArray))),
