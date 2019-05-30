@@ -53,7 +53,10 @@ function* _getTakeWhileIterator(iterator, predicate) {
 }
 
 function _getTakeUnitIterator(iterator, unitIndex, unitSize) {
-  return _getTakeIterator(_getSkipIterator(iterator, unitIndex * unitSize), unitSize);
+  return _getTakeIterator(
+    _getSkipIterator(iterator, unitIndex * unitSize),
+    unitSize
+  );
 }
 
 function* concatIterator(iterator, secondIterator) {
@@ -146,7 +149,11 @@ function aggregate(iterator, updateResult, initValue) {
 function toArray(iterator, getValueFunc) {
   let result = [];
   let next;
-  getValueFunc = getValueFunc || function(value){ return value; };
+  getValueFunc =
+    getValueFunc ||
+    function(value) {
+      return value;
+    };
 
   while (!(next = iterator.next()).done) {
     result.push(getValueFunc(next.value));
@@ -174,15 +181,19 @@ function _iterate(iterator) {
 
     skip: count => _iterate(_getSkipIterator(iterator, count)),
 
-    skipWhile: condition => _iterate(_getSkipWhileIterator(iterator, condition)),
+    skipWhile: condition =>
+      _iterate(_getSkipWhileIterator(iterator, condition)),
 
     take: count => _iterate(_getTakeIterator(iterator, count)),
 
-    takeWhile: condition => _iterate(_getTakeWhileIterator(iterator, condition)),
+    takeWhile: condition =>
+      _iterate(_getTakeWhileIterator(iterator, condition)),
 
-    takeUnit: (unitIndex, unitSize) => _iterate(_getTakeUnitIterator(iterator, unitIndex, unitSize)),
+    takeUnit: (unitIndex, unitSize) =>
+      _iterate(_getTakeUnitIterator(iterator, unitIndex, unitSize)),
 
-    concat: secondArray => _iterate(concatIterator(iterator, _getIterator(secondArray))),
+    concat: secondArray =>
+      _iterate(concatIterator(iterator, _getIterator(secondArray))),
 
     distinct: () => _iterate(distinctIterator(iterator)),
 
@@ -195,7 +206,8 @@ function _iterate(iterator) {
 
     any: condition => anyWhere(iterator, condition),
 
-    aggregate: (resultNextFunc, seed) => aggregate(iterator, resultNextFunc, seed),
+    aggregate: (resultNextFunc, seed) =>
+      aggregate(iterator, resultNextFunc, seed),
 
     count: condition => countWhere(iterator, condition),
 
@@ -203,9 +215,10 @@ function _iterate(iterator) {
 
     elementAt: index => firstWhere(iterator, () => index-- <= 0),
 
-    toKeyValue: (keyFunc, valueFunc) => toKeyValue(iterator, keyFunc, valueFunc),
+    toKeyValue: (keyFunc, valueFunc) =>
+      toKeyValue(iterator, keyFunc, valueFunc),
 
-    toArray: valueFunc => toArray(iterator, valueFunc),
+    toArray: valueFunc => toArray(iterator, valueFunc)
 
     // not implemented yet
 
@@ -238,8 +251,6 @@ function _iterate(iterator) {
     // distinct
     // except
     // intersect
-
-
   };
 }
 
