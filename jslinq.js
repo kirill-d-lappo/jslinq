@@ -2,7 +2,7 @@ function _getIterator(instance) {
   return instance[Symbol.iterator]();
 }
 
-function* whereIterator(iterator, condition) {
+function* _getWhereIterator(iterator, condition) {
   let next;
   while (!(next = iterator.next()).done) {
     if (condition(next.value)) {
@@ -11,22 +11,22 @@ function* whereIterator(iterator, condition) {
   }
 }
 
-function* selectIterator(iterator, projection) {
+function* _getSelectIterator(iterator, projection) {
   let next;
   while (!(next = iterator.next()).done) {
     yield projection(next.value);
   }
 }
 
-function* skipIterator(iterator, count) {
-  var innerIterator = skipWhileIterator(iterator, () => --count > 0);
+function* _getSkipIterator(iterator, count) {
+  var innerIterator = _getSkipWhileIterator(iterator, () => --count > 0);
   let next;
   while (!(next = innerIterator.next()).done) {
     yield next.value;
   }
 }
 
-function* skipWhileIterator(iterator, predicate) {
+function* _getSkipWhileIterator(iterator, predicate) {
   let next;
   while (!(next = iterator.next()).done && predicate(next.value)) {
     // eslint-disable-next-line no-empty
@@ -37,23 +37,23 @@ function* skipWhileIterator(iterator, predicate) {
   }
 }
 
-function* takeIterator(iterator, count) {
-  let innerIterator = takeWhileIterator(iterator, () => count-- > 0);
+function* _getTakeIterator(iterator, count) {
+  let innerIterator = _getTakeWhileIterator(iterator, () => count-- > 0);
   let next;
   while (!(next = innerIterator.next()).done) {
     yield next.value;
   }
 }
 
-function* takeWhileIterator(iterator, predicate) {
+function* _getTakeWhileIterator(iterator, predicate) {
   let next;
   while (!(next = iterator.next()).done && predicate(next.value)) {
     yield next.value;
   }
 }
 
-function takeUnitIterator(iterator, unitIndex, unitSize) {
-  return takeIterator(skipIterator(iterator, unitIndex * unitSize), unitSize);
+function _getTakeUnitIterator(iterator, unitIndex, unitSize) {
+  return _getTakeIterator(_getSkipIterator(iterator, unitIndex * unitSize), unitSize);
 }
 
 function* concatIterator(iterator, secondIterator) {
@@ -143,25 +143,23 @@ function aggregate(iterator, updateResult, initValue) {
   return result;
 }
 
-function toArray(iterator, valueFunc) {
+function toArray(iterator, getValueFunc) {
   let result = [];
   let next;
-  let currentValue;
+  getValueFunc = getValueFunc || function(value){ return value; };
 
   while (!(next = iterator.next()).done) {
-    currentValue = valueFunc ? valueFunc(next.value) : next.value;
-
-    result.push(currentValue);
+    result.push(getValueFunc(next.value));
   }
 
   return result;
 }
 
-function toKeyValue(iterator, keyFunc, valueFunc) {
+function toKeyValue(iterator, getKeyFunc, getValueFunc) {
   let result = {};
   let next;
   while (!(next = iterator.next()).done) {
-    result[keyFunc(next.value)] = valueFunc(next.value);
+    result[getKeyFunc(next.value)] = getValueFunc(next.value);
   }
 
   return result;
@@ -169,34 +167,45 @@ function toKeyValue(iterator, keyFunc, valueFunc) {
 
 function _iterate(iterator) {
   return {
-    where: condition => _iterate(whereIterator(iterator, condition)),
-    select: projection => _iterate(selectIterator(iterator, projection)),
+    // Fitler and map
+    where: condition => _iterate(_getWhereIterator(iterator, condition)),
 
-    skip: count => _iterate(skipIterator(iterator, count)),
-    skipWhile: condition => _iterate(skipWhileIterator(iterator, condition)),
-    take: count => _iterate(takeIterator(iterator, count)),
-    takeWhile: condition => _iterate(takeWhileIterator(iterator, condition)),
-    takeUnit: (unitIndex, unitSize) =>
-      _iterate(takeUnitIterator(iterator, unitIndex, unitSize)),
+    select: projection => _iterate(_getSelectIterator(iterator, projection)),
 
-    first: condition => firstWhere(iterator, condition),
-    last: condition => lastWhere(iterator, condition),
+    skip: count => _iterate(_getSkipIterator(iterator, count)),
 
-    concat: secondArray =>
-      _iterate(concatIterator(iterator, _getIterator(secondArray))),
+    skipWhile: condition => _iterate(_getSkipWhileIterator(iterator, condition)),
+
+    take: count => _iterate(_getTakeIterator(iterator, count)),
+
+    takeWhile: condition => _iterate(_getTakeWhileIterator(iterator, condition)),
+
+    takeUnit: (unitIndex, unitSize) => _iterate(_getTakeUnitIterator(iterator, unitIndex, unitSize)),
+
+    concat: secondArray => _iterate(concatIterator(iterator, _getIterator(secondArray))),
+
     distinct: () => _iterate(distinctIterator(iterator)),
 
     // Conclusion functions, which doesn't return iterator
+    first: condition => firstWhere(iterator, condition),
+
+    last: condition => lastWhere(iterator, condition),
+
     all: condition => allWhere(iterator, condition),
+
     any: condition => anyWhere(iterator, condition),
-    aggregate: (resultNextFunc, seed) =>
-      aggregate(iterator, resultNextFunc, seed),
+
+    aggregate: (resultNextFunc, seed) => aggregate(iterator, resultNextFunc, seed),
+
     count: condition => countWhere(iterator, condition),
+
     contains: item => anyWhere(iterator, i => i === item),
+
     elementAt: index => firstWhere(iterator, () => index-- <= 0),
-    toKeyValue: (keyFunc, valueFunc) =>
-      toKeyValue(iterator, keyFunc, valueFunc),
-    toArray: valueFunc => toArray(iterator, valueFunc)
+
+    toKeyValue: (keyFunc, valueFunc) => toKeyValue(iterator, keyFunc, valueFunc),
+
+    toArray: valueFunc => toArray(iterator, valueFunc),
 
     // not implemented yet
 
@@ -204,7 +213,6 @@ function _iterate(iterator) {
     // contains
     // average
     // sum
-    // elementAt
 
     // not so complex
     // single
@@ -225,6 +233,13 @@ function _iterate(iterator) {
     // no idea yet
     // join,
     // groupJoin
+
+    // need to check comparing bases in JS, check SameValue comparing
+    // distinct
+    // except
+    // intersect
+
+
   };
 }
 
