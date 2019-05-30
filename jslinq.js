@@ -182,13 +182,13 @@ function _iterate(iterator) {
     first: condition => firstWhere(iterator, condition),
     last: condition => lastWhere(iterator, condition),
 
-    all: condition => allWhere(iterator, condition),
-    any: condition => anyWhere(iterator, condition),
     concat: secondArray =>
       _iterate(concatIterator(iterator, _getIterator(secondArray))),
     distinct: () => _iterate(distinctIterator(iterator)),
 
     // Conclusion functions, which doesn't return iterator
+    all: condition => allWhere(iterator, condition),
+    any: condition => anyWhere(iterator, condition),
     aggregate: (resultNextFunc, seed) =>
       aggregate(iterator, resultNextFunc, seed),
     count: condition => countWhere(iterator, condition),
@@ -197,6 +197,34 @@ function _iterate(iterator) {
     toKeyValue: (keyFunc, valueFunc) =>
       toKeyValue(iterator, keyFunc, valueFunc),
     toArray: valueFunc => toArray(iterator, valueFunc)
+
+    // not implemented yet
+
+    // why not yet?
+    // contains
+    // average
+    // sum
+    // elementAt
+
+    // not so complex
+    // single
+
+    // Filters by type number, string, object.
+    // ofType: valueType => { throw "ofType is not implemented. Params " + valueType; },
+
+    // No idea how to implement
+    // orderBy: getValueFunc => { throw "orderBy is not implemented. Params " + getValueFunc; },
+    // thenBy: getValueFunc => { throw "thenBy is not implemented. Params " + getValueFunc; },
+
+    // possible but gemorno
+    // groupBy: getValueFunc => { throw "thenBy is not implemented. Params " + getValueFunc; },
+
+    // same as reduce
+    // aggregate
+
+    // no idea yet
+    // join,
+    // groupJoin
   };
 }
 
