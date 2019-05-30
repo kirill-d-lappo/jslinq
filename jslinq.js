@@ -240,9 +240,6 @@ function _iterate(iterator) {
     // possible but gemorno
     // groupBy: getValueFunc => { throw "thenBy is not implemented. Params " + getValueFunc; },
 
-    // same as reduce
-    // aggregate
-
     // no idea yet
     // join,
     // groupJoin
