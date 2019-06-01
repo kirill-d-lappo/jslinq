@@ -1,5 +1,11 @@
-function _getIterator(instance) {
-  return instance[Symbol.iterator]();
+function _getIterator(sequence) {
+  if (sequence[Symbol.iterator]) {
+    return sequence[Symbol.iterator]();
+  }
+
+  if (sequence._getIterator) {
+    return sequence._getIterator();
+  }
 }
 
 function* _getWhereIterator(iterator, condition) {
@@ -181,26 +187,27 @@ function toKeyValue(iterator, getKeyFunc, getValueFunc) {
   return result;
 }
 
-function _iterate(iterator) {
+function _sequence(iterator) {
   return {
+    _getIterator: () => iterator,
     // Fitler and map
-    where: condition => _iterate(_getWhereIterator(iterator, condition)),
+    where: condition => _sequence(_getWhereIterator(iterator, condition)),
 
-    select: projection => _iterate(_getSelectIterator(iterator, projection)),
+    select: projection => _sequence(_getSelectIterator(iterator, projection)),
 
     skip: () =>
-      _iterate(_getSkipIterator.apply(null, [iterator, ...arguments])),
+      _sequence(_getSkipIterator.apply(null, [iterator, ...arguments])),
 
     take: () =>
-      _iterate(_getTakeIterator.apply(null, [iterator, ...arguments])),
+      _sequence(_getTakeIterator.apply(null, [iterator, ...arguments])),
 
     takeUnit: (unitIndex, unitSize) =>
-      _iterate(_getTakeUnitIterator(iterator, unitIndex, unitSize)),
+      _sequence(_getTakeUnitIterator(iterator, unitIndex, unitSize)),
 
-    concat: secondArray =>
-      _iterate(concatIterator(iterator, _getIterator(secondArray))),
+    concat: sequence =>
+      _sequence(concatIterator(iterator, _getIterator(sequence))),
 
-    distinct: () => _iterate(distinctIterator(iterator)),
+    distinct: () => _sequence(distinctIterator(iterator)),
 
     // Conclusion functions, which doesn't return iterator
     first: condition => firstWhere(iterator, condition),
@@ -257,5 +264,5 @@ function _iterate(iterator) {
 }
 
 Array.prototype.seq = function() {
-  return _iterate(_getIterator(this));
+  return _sequence(_getIterator(this));
 };

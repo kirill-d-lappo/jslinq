@@ -1,8 +1,8 @@
-# jslinq
+# jsSequence
 
 ## Description
 
-Yet another LINQ adaptation on JS. Created for arrays only and bases on js iterators.
+Yet another Enumerable adaptation on JS. Created for arrays only and bases on js iterators.
 
 Very early and unfinished; do I have much time to complete it?...
 
@@ -11,7 +11,7 @@ Very early and unfinished; do I have much time to complete it?...
 ## Examples
 
 ```javascript
-require("jslinq");
+require("jssequence");
 
 let users = [
     {id:1, name:"Rick", sex:"male", age:55, isActive:true},
@@ -58,20 +58,20 @@ hasAnyMaleCharacter = users.seq()
 
 |Function|Description|Returns
 |-|-|-|
-|`.seq()`|Special function, which returns linq object. Entrypoint for all other functions, which are described here.|Iterable object
-| `.select(function)`|Similar to `array.map` function, reflects array into another array using `function`|Iterable object
-|`.where(function)`|Similar to `filter` functions, it filters items in aray using `function`|Iterable object
-|`.skip(number)`|Skips first `number` items in array|Iterable object
-|`.skip(function)`|Skips first items in array untill `function` returns true|Iterable object
-|`.skip(object)`|Skips first items in array untill items are not equal to `object`|Iterable object
-|`.take(number)`|Takes first `number` items in array|Iterable object
-|`.take(function)`|Takes first items in array untill `function` returns false|Iterable object
-|`.take(object)`|Skips first items in array untill items are not equal to `object`|Iterable object
-|`.takeUnit(unitIndex, unitSize)`|Takes sub-array. Original arrays is splited by `unitSize` groups of items and `unitIndex`th group is returned|Iterable object
-|`.concat(array)`|Continues original array with `array`|Iterable object
-|`.distinct(array)`|Returns sequences with unique items|Iterable object
+|`.seq()`|Special function, which returns sequence object. Entrypoint for all other functions, which are described here.|Sequence Object
+| `.select(function)`|Similar to `array.map` function, reflects sequence into another sequence using `function`|Sequence Object
+|`.where(function)`|Similar to `filter` functions, it filters items in a sequence using `function`|Sequence Object
+|`.skip(number)`|Skips first `number` items in a sequence.|Sequence Object
+|`.skip(function)`|Skips first items in a sequence untill `function` returns true|Sequence Object
+|`.skip(object)`|Skips first items in a sequence untill items are not equal to `object`|Sequence Object
+|`.take(number)`|Takes first `number` items in a sequence|Sequence Object
+|`.take(function)`|Takes first items in a sequence untill `function` returns false|Sequence Object
+|`.take(object)`|Skips first items in a sequence untill items are not equal to `object`|Sequence Object
+|`.takeUnit(unitIndex, unitSize)`|Takes sub-sequence. Original sequence is splited by `unitSize` groups of items and `unitIndex`th group is returned|Sequence Object
+|`.concat(array)`|Continues original sequence with array|Sequence Object
+|`.distinct(array)`|Returns sequence with unique items|Sequence Object
 ||
-|`.first()`|Returns first item from sequence|Item
+|`.first()`|Returns first item from a sequence|Item
 |`.first(function)`|Returns first item from sequence, when `function` returns `true`|Item
 |`.last()`|Returns last item from sequence|Item
 |`.last(function)`|Returns last item from sequence, when `function` returns `true`|Item
