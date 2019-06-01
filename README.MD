@@ -14,9 +14,9 @@ Very early and unfinished; do I have much time to complete it?...
 require("jssequence");
 
 let users = [
-    {id:1, name:"Rick", sex:"male", age:55, isActive:true},
-    {id:2, name:"Morty", sex:"boy", age:15, isActive:true},
-    {id:2, name:"Jerry", sex:undefined, age:28, isActive:false},
+    {id:1, name:"Rick",  type:"grandpa", age:55, isActive:true},
+    {id:2, name:"Morty", type:"boy", age:15, isActive:true},
+    {id:2, name:"Jerry", type:undefined, age:28, isActive:false},
 ];
 
 // Filtering and reflection
@@ -44,14 +44,14 @@ let adultSwimUsers = users.seq()
         (result, nextUser) => result + nextUser.name,
         "");
 
-// Any male character here
-let hasAnyMaleCharacter = users.seq()
-    .where(u => u.sex === "male")
+// Any granda here
+let hasAnyGrandpaCharacter = users.seq()
+    .where(u => u.type === "grandpa")
     .any()
 
 // Or the expression could be shorter
-hasAnyMaleCharacter = users.seq()
-    .any(u => u.sex === "male")
+hasAnyGrandpaCharacter = users.seq()
+    .any(u => u.type === "grandpa")
 ```
 
 ## Functions
