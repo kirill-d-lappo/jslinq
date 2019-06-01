@@ -203,7 +203,7 @@ function _iterate(iterator) {
     distinct: () => _iterate(distinctIterator(iterator)),
 
     // Conclusion functions, which doesn't return iterator
-    first: () => firstWhere.apply(null, [iterator, ...arguments]),
+    first: condition => firstWhere(iterator, condition),
 
     last: condition => lastWhere(iterator, condition),
 

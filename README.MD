@@ -34,7 +34,7 @@ let aAndB = a.asEnumerable() // ["1", "2", "3", "4", "5", "6"]
 
 |Function|Description|Returns
 |-|-|-|
-|`.asEnumerable()`|Special function, which returns linq object|Iterable object
+|`.asEnumerable()`|Special function, which returns linq object. Entrypoint for all other functions, which are described here.|Iterable object
 | `.select(function)`|Similar to `array.map` function, reflects array into another array using `function`|Iterable object
 |`.where(function)`|Similar to `filter` functions, it filters items in aray using `function`|Iterable object
 |`.skip(number)`|Skips first `number` items in array|Iterable object
@@ -47,4 +47,18 @@ let aAndB = a.asEnumerable() // ["1", "2", "3", "4", "5", "6"]
 |`.concat(array)`|Continues original array with `array`|Iterable object
 |`.distinct(array)`|Returns sequences with unique items|Iterable object
 ||
-|`.first(array)`|Returns sequences with unique items|Iterable object
+|`.first()`|Returns first item from sequence|Item
+|`.first(function)`|Returns first item from sequence, when `function` returns `true`|Item
+|`.last()`|Returns last item from sequence|Item
+|`.last(function)`|Returns last item from sequence, when `function` returns `true`|Item
+|`.all(function)`|Returns `true` when `function` returns `true` for all items in a sequence, `false` otherwise.|boolean
+|`.any()`|Returns `true` when sequence has at least one element, `false` otherwise.|boolean
+|`.any(function)`|Returns `true` when `function` returns `true` for at least one item in a sequence, `false` otherwise.|boolean
+|`.aggregate(function, object)`|Similar to popular `reduce` function. Returns aggregated value, which is constructed with sequence items, `function(currentResult, nextItem)` and initial value `object`.|Object
+|`.count()`|Returns amount of elements in a sequence.|number
+|`.count(function)`|Returns amount of elements in a sequence for which `function(item)` returns `true`.|number
+|`.contains(object)`|Returns `true` when sequence contains `object`, `false` otherwise.|boolean
+|`.elementAt(index)`|Returns `index`th object in a sequence.|Object
+|`.toKeyValue(keyFunction, valueFunction)`|Converts a sequence in to a key-value object using `keyFunction(item)` and `valueFunction(item)`.|Object
+|`.toArray()`|Converts a sequence into an array.|Array
+|`.toArray(function)`|Converts a sequence into an array using a value function `function(item)`.|Array
