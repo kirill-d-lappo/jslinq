@@ -18,14 +18,6 @@ function* _getSelectIterator(iterator, projection) {
   }
 }
 
-function* _getSkipIterator(iterator, count) {
-  var innerIterator = _getSkipWhileIterator(iterator, () => --count > 0);
-  let next;
-  while (!(next = innerIterator.next()).done) {
-    yield next.value;
-  }
-}
-
 function* _getSkipWhileIterator(iterator, predicate) {
   let next;
   while (!(next = iterator.next()).done && predicate(next.value)) {
@@ -33,14 +25,6 @@ function* _getSkipWhileIterator(iterator, predicate) {
   }
 
   while (!(next = iterator.next()).done) {
-    yield next.value;
-  }
-}
-
-function* _getTakeIterator(iterator, count) {
-  let innerIterator = _getTakeWhileIterator(iterator, () => count-- > 0);
-  let next;
-  while (!(next = innerIterator.next()).done) {
     yield next.value;
   }
 }
@@ -179,12 +163,12 @@ function _iterate(iterator) {
 
     select: projection => _iterate(_getSelectIterator(iterator, projection)),
 
-    skip: count => _iterate(_getSkipIterator(iterator, count)),
+    skip: count => _iterate(_getSkipWhileIterator(iterator, () => --count > 0)),
 
     skipWhile: condition =>
       _iterate(_getSkipWhileIterator(iterator, condition)),
 
-    take: count => _iterate(_getTakeIterator(iterator, count)),
+    take: count => _iterate(_getTakeWhileIterator(iterator, () => count-- > 0)),
 
     takeWhile: condition =>
       _iterate(_getTakeWhileIterator(iterator, condition)),
