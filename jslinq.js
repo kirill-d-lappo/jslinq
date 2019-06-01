@@ -149,6 +149,7 @@ function toArray(iterator, getValueFunc) {
 function toKeyValue(iterator, getKeyFunc, getValueFunc) {
   let result = {};
   let next;
+
   while (!(next = iterator.next()).done) {
     result[getKeyFunc(next.value)] = getValueFunc(next.value);
   }
