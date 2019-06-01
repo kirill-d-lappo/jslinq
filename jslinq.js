@@ -18,6 +18,30 @@ function* _getSelectIterator(iterator, projection) {
   }
 }
 
+function _getTakeIterator(iterator, param1) {
+  if (typeof param1 === "function") {
+    return _getTakeWhileIterator(iterator, param1);
+  }
+
+  if (typeof param1 === "number") {
+    return _getTakeWhileIterator(iterator, () => --param1 > 0);
+  }
+
+  return _getTakeWhileIterator(iterator, i => i !== param1);
+}
+
+function _getSkipIterator(iterator, param1) {
+  if (typeof param1 === "function") {
+    return _getSkipWhileIterator(iterator, param1);
+  }
+
+  if (typeof param1 === "number") {
+    return _getSkipWhileIterator(iterator, () => --param1 > 0);
+  }
+
+  return _getSkipWhileIterator(iterator, i => i !== param1);
+}
+
 function* _getSkipWhileIterator(iterator, predicate) {
   let next;
   while (!(next = iterator.next()).done && predicate(next.value)) {
@@ -164,15 +188,11 @@ function _iterate(iterator) {
 
     select: projection => _iterate(_getSelectIterator(iterator, projection)),
 
-    skip: count => _iterate(_getSkipWhileIterator(iterator, () => --count > 0)),
+    skip: () =>
+      _iterate(_getSkipIterator.apply(null, [iterator, ...arguments])),
 
-    skipWhile: condition =>
-      _iterate(_getSkipWhileIterator(iterator, condition)),
-
-    take: count => _iterate(_getTakeWhileIterator(iterator, () => count-- > 0)),
-
-    takeWhile: condition =>
-      _iterate(_getTakeWhileIterator(iterator, condition)),
+    take: () =>
+      _iterate(_getTakeIterator.apply(null, [iterator, ...arguments])),
 
     takeUnit: (unitIndex, unitSize) =>
       _iterate(_getTakeUnitIterator(iterator, unitIndex, unitSize)),
@@ -183,7 +203,7 @@ function _iterate(iterator) {
     distinct: () => _iterate(distinctIterator(iterator)),
 
     // Conclusion functions, which doesn't return iterator
-    first: condition => firstWhere(iterator, condition),
+    first: () => firstWhere.apply(null, [iterator, ...arguments]),
 
     last: condition => lastWhere(iterator, condition),
 
