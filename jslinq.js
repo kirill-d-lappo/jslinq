@@ -256,6 +256,6 @@ function _iterate(iterator) {
   };
 }
 
-Array.prototype.asEnumerable = function() {
+Array.prototype.seq = function() {
   return _iterate(_getIterator(this));
 };

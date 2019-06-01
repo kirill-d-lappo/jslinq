@@ -8,33 +8,57 @@ Very early and unfinished; do I have much time to complete it?...
 
 **NOTE**: All equality operations are done with `===` operator, SameValue equality is not used.
 
-## Usage
+## Examples
 
 ```javascript
 require("jslinq");
 
-let array = [1, 2, 3, 4, 5, 6];
-let filteredValues = array.asEnumerable() // ["x2", "x4", "x6"]
-    .where(r => !(r % 2))  // just iterator
-    .select(r => `x${r}`) // just iterator
-    .toArray(); // result array is created only at that step
+let users = [
+    {id:1, name:"Rick", sex:"male", age:55, isActive:true},
+    {id:2, name:"Morty", sex:"boy", age:15, isActive:true},
+    {id:2, name:"Jerry", sex:undefined, age:28, isActive:false},
+];
 
-array = [1, 2, 3, 4, 5, 6];
-let areInFirstTenth = array.asEnumerable() // true, all are < 10
-    .all(i => i < 10);
+// Filtering and reflection
+let activeUserIds = array
+    // accessing to linq-like functions
+    .seq()
+    // It doesn't create a new array at this point
+    // It just keeps info about sorting
+    .where(u => u.isActive)
+    // Just keeping info about reflection, no new array here
+    .select(u => u.id)
+    // New array is created here, [1, 2]
+    .toArray();
 
-let a = [1, 2, 3];
-let b = [4, 5, 6];
-let aAndB = a.asEnumerable() // ["1", "2", "3", "4", "5", "6"]
-    .concat(b) // concat iterator here
-    .toArray(i => i.toString()); // result array is created only here
+// Lets find an age of the first user which has 5 letters in his name
+// Yeah, I'm a pervert
+let fiveLetterUserAge = users.seq()
+    .first(u => u.name.length === 5)
+    .age;
+
+// Combine user names, who is old enaugh ( >= 18)
+let adultSwimUsers = users.seq()
+    .where(u => u.age >= 18)
+    .aggregate(
+        (result, nextUser) => result + nextUser.name,
+        "");
+
+// Any male character here
+let hasAnyMaleCharacter = users.seq()
+    .where(u => u.sex === "male")
+    .any()
+
+// Or the expression could be shorter
+hasAnyMaleCharacter = users.seq()
+    .any(u => u.sex === "male")
 ```
 
 ## Functions
 
 |Function|Description|Returns
 |-|-|-|
-|`.asEnumerable()`|Special function, which returns linq object. Entrypoint for all other functions, which are described here.|Iterable object
+|`.seq()`|Special function, which returns linq object. Entrypoint for all other functions, which are described here.|Iterable object
 | `.select(function)`|Similar to `array.map` function, reflects array into another array using `function`|Iterable object
 |`.where(function)`|Similar to `filter` functions, it filters items in aray using `function`|Iterable object
 |`.skip(number)`|Skips first `number` items in array|Iterable object
