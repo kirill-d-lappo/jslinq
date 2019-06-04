@@ -15,6 +15,33 @@ describe("Positive Flow", () => {
   // Arrange
   const tenSource = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+  it("toArray() : creates array of items in a sequence", () => {
+    var result = tenSource.seq().toArray();
+    expect(tenSource).to.deep.equal(result);
+  });
+
+  it("select() : result array is reflected correctly", () => {
+    var result = tenSource
+      .seq()
+      .select(i => i % 2 === 0)
+      .toArray();
+
+    var expectedResult = [
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      true
+    ];
+
+    expect(expectedResult).to.deep.equal(result);
+  });
+
   it("where() : array has subset for condition : correct subset is returned", function() {
     var result = tenSource
       .seq()
@@ -23,6 +50,17 @@ describe("Positive Flow", () => {
 
     expect(1).to.equal(result.length);
     expect(5).to.equal(result[0]);
+  });
+
+  it("skip() : skips correct amount of items", () => {
+    var result = tenSource
+      .seq()
+      .skip(i => i <= 3)
+      .toArray();
+
+    var expectedResult = [4, 5, 6, 7, 8, 9, 10];
+
+    expect(expectedResult).to.deep.equal(result);
   });
 
   it("count() : array not empty : correct value is returned", function() {
@@ -78,12 +116,16 @@ describe("Positive Flow", () => {
   });
 
   it("toKeyValue(index) : array is converted correctly", function() {
-    var result = tenSource.seq().toKeyValue(i => "i" + i, i => (i * 3) / 2);
+    function valueFunc(value) {
+      return (value * 3) / 2;
+    }
 
-    expect(result["i1"]).to.equal((1 * 3) / 2);
-    expect(result["i2"]).to.equal((2 * 3) / 2);
-    expect(result["i3"]).to.equal((3 * 3) / 2);
-    expect(result["i4"]).to.equal((4 * 3) / 2);
+    var result = tenSource.seq().toKeyValue(i => "i" + i, i => valueFunc(i));
+
+    expect(result["i1"]).to.equal(valueFunc(1));
+    expect(result["i2"]).to.equal(valueFunc(2));
+    expect(result["i3"]).to.equal(valueFunc(3));
+    expect(result["i4"]).to.equal(valueFunc(4));
   });
 
   it("distinct() : unique elements remained only", function() {

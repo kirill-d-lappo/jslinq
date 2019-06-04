@@ -2,6 +2,8 @@ function _getIterator(sequence) {
   if (sequence[Symbol.iterator]) {
     return sequence[Symbol.iterator]();
   }
+
+  throw `Sequence object doesn't have Symbol.iterator member. Sequence object : ${sequence}`;
 }
 
 function* _getWhereIterator(iterator, condition) {
