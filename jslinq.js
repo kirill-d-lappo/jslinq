@@ -2,10 +2,6 @@ function _getIterator(sequence) {
   if (sequence[Symbol.iterator]) {
     return sequence[Symbol.iterator]();
   }
-
-  if (sequence._getIterator) {
-    return sequence._getIterator();
-  }
 }
 
 function* _getWhereIterator(iterator, condition) {
@@ -189,7 +185,7 @@ function toKeyValue(iterator, getKeyFunc, getValueFunc) {
 
 function _sequence(iterator) {
   return {
-    _getIterator: () => iterator,
+    [Symbol.iterator]: iterator,
     // Fitler and map
     where: condition => _sequence(_getWhereIterator(iterator, condition)),
 
