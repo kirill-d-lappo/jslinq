@@ -48,8 +48,11 @@ function _getSkipIterator(iterator, param1) {
 
 function* _getSkipWhileIterator(iterator, predicate) {
   let next;
-  while (!(next = iterator.next()).done && predicate(next.value)) {
-    // eslint-disable-next-line no-empty
+  while (!(next = iterator.next()).done) {
+    if (!predicate(next.value)) {
+      yield next.value;
+      break;
+    }
   }
 
   while (!(next = iterator.next()).done) {
@@ -193,11 +196,13 @@ function _sequence(iterator) {
 
     select: projection => _sequence(_getSelectIterator(iterator, projection)),
 
-    skip: () =>
-      _sequence(_getSkipIterator.apply(null, [iterator, ...arguments])),
+    skip() {
+      return _sequence(_getSkipIterator.apply(null, [iterator, ...arguments]));
+    },
 
-    take: () =>
-      _sequence(_getTakeIterator.apply(null, [iterator, ...arguments])),
+    take() {
+      return _sequence(_getTakeIterator.apply(null, [iterator, ...arguments]));
+    },
 
     takeUnit: (unitIndex, unitSize) =>
       _sequence(_getTakeUnitIterator(iterator, unitIndex, unitSize)),

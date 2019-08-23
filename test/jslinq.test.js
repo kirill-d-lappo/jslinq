@@ -63,6 +63,17 @@ describe("Positive Flow", () => {
     expect(expectedResult).to.deep.equal(result);
   });
 
+  it("take() : takes correct amount of items", () => {
+    var result = tenSource
+      .seq()
+      .take(i => i <= 3)
+      .toArray();
+
+    var expectedResult = [1, 2, 3];
+
+    expect(expectedResult).to.deep.equal(result);
+  });
+
   it("count() : array not empty : correct value is returned", function() {
     var result = tenSource.seq().count();
 
