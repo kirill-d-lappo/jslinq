@@ -1,4 +1,4 @@
-require("../jslinq");
+require("../jssequence");
 const chai = require("chai");
 
 const expect = chai.expect;

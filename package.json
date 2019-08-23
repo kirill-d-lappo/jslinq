@@ -3,6 +3,7 @@
     "type": "git",
     "url": "git://github.com/Kira-Lappo/jslinq.git"
   },
+  "license": "GPL-2.0-only",
   "scripts": {
     "test": "mocha test --recursive",
     "test:w": "mocha test --recursive --watch"
