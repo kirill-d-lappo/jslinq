@@ -62,19 +62,20 @@ Function|Description|Returns
  `.select(function)`|Similar to `array.map` function, reflects sequence nto another sequence using `function`|Sequence Object
 `.where(function)`|Similar to `filter` functions, it filters items in a equence using `function`|Sequence Object
 `.skip(number)`|Skips first `number` items in a sequence.|Sequence Object
-`.skip(function)`|Skips first items in a sequence untill `function` eturns true|Sequence Object
+`.skip(function)`|Skips first items in a sequence untill `function` returns true|Sequence Object
 `.skip(object)`|Skips first items in a sequence untill items are not qual to `object`|Sequence Object
 `.take(number)`|Takes first `number` items in a sequence|Sequence Object
-`.take(function)`|Takes first items in a sequence untill `function` eturns false|Sequence Object
+`.take(function)`|Takes first items in a sequence untill `function` returns false|Sequence Object
 `.take(object)`|Skips first items in a sequence untill items are not qual to `object`|Sequence Object
 `.takeUnit(unitIndex, unitSize)`|Takes sub-sequence. Original sequence s splited by `unitSize` groups of items and `unitIndex`th group is eturned|Sequence Object
 `.concat(array)`|Continues original sequence with array|Sequence Object
 `.distinct(array)`|Returns sequence with unique items|Sequence Object
 ||
 `.first()`|Returns first item from a sequence|Item
-`.first(function)`|Returns first item from sequence, when `function` eturns `true`|Item
+`.first(function)`|Returns first item from sequence, when `function` returns `true`|Item
 `.last()`|Returns last item from sequence|Item
-`.last(function)`|Returns last item from sequence, when `function` eturns `true`|Item
+`.last(function)`|Returns last item from sequence, when `function` returns `true`|Item
+`.single(function)`|Returns the only item from sequence, which makes `function` return `true`|Item
 `.all(function)`|Returns `true` when `function` returns `true` for all tems in a sequence, `false` otherwise.|boolean
 `.any()`|Returns `true` when sequence has at least one element, `false` therwise.|boolean
 `.any(function)`|Returns `true` when `function` returns `true` for at east one item in a sequence, `false` otherwise.|boolean
