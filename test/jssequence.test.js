@@ -16,17 +16,17 @@ describe("Positive Flow", () => {
   const tenSource = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   it("toArray() : creates array of items in a sequence", () => {
-    var result = tenSource.seq().toArray();
+    const result = tenSource.seq().toArray();
     expect(tenSource).to.deep.equal(result);
   });
 
   it("select() : result array is reflected correctly", () => {
-    var result = tenSource
+    const result = tenSource
       .seq()
       .select(i => i % 2 === 0)
       .toArray();
 
-    var expectedResult = [
+    const expectedResult = [
       false,
       true,
       false,
@@ -43,7 +43,7 @@ describe("Positive Flow", () => {
   });
 
   it("where() : array has subset for condition : correct subset is returned", function() {
-    var result = tenSource
+    const result = tenSource
       .seq()
       .where(i => i == 5)
       .toArray();
@@ -53,60 +53,67 @@ describe("Positive Flow", () => {
   });
 
   it("skip() : skips correct amount of items", () => {
-    var result = tenSource
+    const result = tenSource
       .seq()
       .skip(i => i <= 3)
       .toArray();
 
-    var expectedResult = [4, 5, 6, 7, 8, 9, 10];
+    const expectedResult = [4, 5, 6, 7, 8, 9, 10];
 
     expect(expectedResult).to.deep.equal(result);
   });
 
   it("take() : takes correct amount of items", () => {
-    var result = tenSource
+    const result = tenSource
       .seq()
       .take(i => i <= 3)
       .toArray();
 
-    var expectedResult = [1, 2, 3];
+    const expectedResult = [1, 2, 3];
 
     expect(expectedResult).to.deep.equal(result);
   });
 
   it("count() : array not empty : correct value is returned", function() {
-    var result = tenSource.seq().count();
+    const result = tenSource.seq().count();
 
     expect(10).to.equal(result);
   });
 
   it("count(condition) : array has subset for condition : correct value is returned", function() {
-    var result = tenSource.seq().count(i => i % 2);
+    const result = tenSource.seq().count(i => i % 2);
 
     expect(5).to.equal(result);
   });
 
   it("any() : array is not empty : true is returned", function() {
-    var result = tenSource.seq().any();
+    const result = tenSource.seq().any();
 
     expect(true).to.equal(result);
   });
 
+  it("single() : single returns single item", function() {
+    const result = tenSource.seq().single(i => i === 4);
+    const expectedResult = 4;
+
+    expect(expectedResult).to.equal(result);
+  });
+
   it("any() : array is empty : false is returned", function() {
-    var result = [].seq().any();
+    const result = [].seq().any();
 
     expect(false).to.equal(result);
   });
 
   it("all(condition) : all items are correct : true is returned", function() {
-    var result = tenSource.seq().all(i => i > 0);
+    const result = tenSource.seq().all(i => i > 0);
 
     expect(true).to.equal(result);
   });
 
   it("concat(secondArray) : items are concatenated", function() {
-    var secondArray = [42, 3.14, 88];
-    var result = tenSource
+    const secondArray = [42, 3.14, 88];
+    const result = tenSource
       .seq()
       .concat(secondArray)
       .toArray();
@@ -115,13 +122,13 @@ describe("Positive Flow", () => {
   });
 
   it("contains(item) : array contains item : true is returned", function() {
-    var result = tenSource.seq().contains(5);
+    const result = tenSource.seq().contains(5);
 
     expect(true).to.equal(result);
   });
 
   it("elementAt(index) : array contains item : correct value is returned", function() {
-    var result = tenSource.seq().elementAt(5);
+    const result = tenSource.seq().elementAt(5);
 
     expect(6).to.equal(result);
   });
@@ -131,7 +138,7 @@ describe("Positive Flow", () => {
       return (value * 3) / 2;
     }
 
-    var result = tenSource.seq().toKeyValue(i => "i" + i, i => valueFunc(i));
+    const result = tenSource.seq().toKeyValue(i => "i" + i, i => valueFunc(i));
 
     expect(result["i1"]).to.equal(valueFunc(1));
     expect(result["i2"]).to.equal(valueFunc(2));
@@ -140,7 +147,7 @@ describe("Positive Flow", () => {
   });
 
   it("distinct() : unique elements remained only", function() {
-    var result = [2, 3, 2, 3, 2, 4]
+    const result = [2, 3, 2, 3, 2, 4]
       .seq()
       .distinct()
       .toArray();

@@ -151,6 +151,22 @@ function countWhere(iterator, predicate) {
   return count;
 }
 
+function singleWhere(iterator, predicate) {
+  let next;
+  let singleItem = null;
+  while (!(next = iterator.next()).done) {
+    if (predicate(next.value)) {
+      if (singleItem) {
+        return null;
+      }
+
+      singleItem = next.value;
+    }
+  }
+
+  return singleItem;
+}
+
 function aggregate(iterator, updateResult, initValue) {
   let result = initValue;
   let next;
@@ -220,6 +236,8 @@ function _sequence(iterator) {
     all: condition => allWhere(iterator, condition),
 
     any: condition => anyWhere(iterator, condition),
+
+    single: condition => singleWhere(iterator, condition),
 
     aggregate: (resultNextFunc, seed) =>
       aggregate(iterator, resultNextFunc, seed),
