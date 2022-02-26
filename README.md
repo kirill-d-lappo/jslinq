@@ -57,7 +57,7 @@ hasAnyGrandpaCharacter = users.seq()
 ## Functions
 
 Function|Description|Returns
--|-|-
+---|---|---
 `.seq()`|Special function, which returns sequence object. Entrypoint for ll other functions, which are described here.|Sequence Object
  `.select(function)`|Similar to `array.map` function, reflects sequence nto another sequence using `function`|Sequence Object
 `.where(function)`|Similar to `filter` functions, it filters items in a equence using `function`|Sequence Object
